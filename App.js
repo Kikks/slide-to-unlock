@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import SlideToUnlock from "./src/SlideToUnlock";
 
 export default function App() {
-	const [locked, setLocked] = useState(true);
+	const [locked, setLocked] = useState(false);
 
 	return (
 		<SafeAreaView style={styles.safeArea}>

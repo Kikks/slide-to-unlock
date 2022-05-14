@@ -26,18 +26,6 @@ const SlideToUnlock = ({ locked, setLocked }) => {
 	});
 
 	useEffect(() => {
-		scrollX.addListener(xPosition => {
-			if (xPosition.value === 0) {
-				setLocked(true);
-			} else {
-				if (xPosition.value > SLIDE_WIDTH - 10) {
-					setLocked(false);
-				}
-			}
-		});
-	}, []);
-
-	useEffect(() => {
 		if (scrollViewRef) {
 			if (locked) {
 				scrollViewRef.scrollTo({
@@ -53,7 +41,7 @@ const SlideToUnlock = ({ locked, setLocked }) => {
 				});
 			}
 		}
-	}, [locked]);
+	}, [scrollViewRef]);
 
 	return (
 		<View style={styles.wrapper}>
@@ -66,10 +54,15 @@ const SlideToUnlock = ({ locked, setLocked }) => {
 				showsHorizontalScrollIndicator={false}
 				removeClippedSubviews
 				style={styles.container}
-				onScroll={Animated.event(
-					[{ nativeEvent: { contentOffset: { x: scrollX } } }],
-					{ useNativeDriver: false }
-				)}
+				onScroll={({ nativeEvent }) => {
+					scrollX.setValue(nativeEvent.contentOffset.x);
+
+					if (nativeEvent.contentOffset.x === 0) {
+						setLocked(true);
+					} else if (nativeEvent.contentOffset.x > SLIDE_WIDTH - 10) {
+						setLocked(false);
+					}
+				}}
 			>
 				<View style={[styles.slide, styles.lockedSlide]}>
 					<Text style={[styles.text, styles.lockedText]}>
