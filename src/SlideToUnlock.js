@@ -25,8 +25,6 @@ const SlideToUnlock = ({ locked, setLocked }) => {
 		outputRange: ["27%", "15%"]
 	});
 
-	console.log(locked);
-
 	useEffect(() => {
 		scrollX.addListener(xPosition => {
 			if (xPosition.value === 0) {
@@ -58,52 +56,60 @@ const SlideToUnlock = ({ locked, setLocked }) => {
 	}, [locked]);
 
 	return (
-		<Animated.ScrollView
-			ref={ref => setScrollViewRef(ref)}
-			decelerationRate='fast'
-			bounces={false}
-			snapToInterval={SLIDE_WIDTH}
-			horizontal
-			showsHorizontalScrollIndicator={false}
-			style={styles.container}
-			onScroll={Animated.event(
-				[{ nativeEvent: { contentOffset: { x: scrollX } } }],
-				{ useNativeDriver: false }
-			)}
-		>
-			<View style={[styles.slide, styles.lockedSlide]}>
-				<Text style={[styles.text, styles.lockedText]}>
-					Slide padlock to switch mode
-				</Text>
-			</View>
+		<View style={styles.wrapper}>
+			<Animated.ScrollView
+				ref={ref => setScrollViewRef(ref)}
+				decelerationRate='fast'
+				bounces={false}
+				snapToInterval={SLIDE_WIDTH}
+				horizontal
+				showsHorizontalScrollIndicator={false}
+				removeClippedSubviews
+				style={styles.container}
+				onScroll={Animated.event(
+					[{ nativeEvent: { contentOffset: { x: scrollX } } }],
+					{ useNativeDriver: false }
+				)}
+			>
+				<View style={[styles.slide, styles.lockedSlide]}>
+					<Text style={[styles.text, styles.lockedText]}>
+						Slide padlock to switch mode
+					</Text>
+				</View>
 
-			<View style={[styles.slide, styles.unlockedSlide]}>
-				<Text style={[styles.text, styles.unlockedText]}>
-					Slide padlock to switch mode
-				</Text>
-			</View>
+				<View style={[styles.slide, styles.unlockedSlide]}>
+					<Text style={[styles.text, styles.unlockedText]}>
+						Slide padlock to switch mode
+					</Text>
+				</View>
 
-			<Animated.View style={[styles.padlock, { left }]}>
-				<Animated.View style={[styles.padlockHook, { top }]}>
-					<PadlockHook />
+				<Animated.View style={[styles.padlock, { left }]}>
+					<Animated.View style={[styles.padlockHook, { top }]}>
+						<PadlockHook />
+					</Animated.View>
+					<PadlockBody style={styles.padlockBody} />
 				</Animated.View>
-				<PadlockBody style={styles.padlockBody} />
-			</Animated.View>
-		</Animated.ScrollView>
+			</Animated.ScrollView>
+		</View>
 	);
 };
 
 export default SlideToUnlock;
 
 const styles = StyleSheet.create({
+	wrapper: {
+		height: SLIDE_HEIGHT,
+		width: SLIDE_WIDTH,
+		borderRadius: 10,
+		overflow: "hidden",
+		borderColor: ACCENT_COLOR,
+		borderWidth: 1
+	},
 	container: {
 		flexDirection: "row",
 		width: SLIDE_WIDTH,
 		height: SLIDE_HEIGHT,
 		borderRadius: 10,
-		overflow: "hidden",
-		borderColor: ACCENT_COLOR,
-		borderWidth: 1,
 		position: "relative"
 	},
 	slide: {
